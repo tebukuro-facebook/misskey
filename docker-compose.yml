@@ -1,15 +1,32 @@
 version: "3"
 
 services:
+  https-portal:
+    image: steveltn/https-portal:1
+    ports:
+      - '80:80'
+      - '443:443'
+    links:
+      - web
+    restart: always
+    networks:
+      - external_network
+      - internal_network
+    environment:
+      DOMAINS: 'misskey.tebukuro.xyz -> http://web:3000'
+      STAGE: 'production'
+      WEBSOCKET: 'true'
+      # FORCE_RENEW: 'true'
+  
   web:
     build: .
     restart: always
     links:
       - db
       - redis
-#      - es
-    ports:
-      - "127.0.0.1:3000:3000"
+      #  - es
+    expose:
+      - 3000
     networks:
       - internal_network
       - external_network
@@ -34,15 +51,15 @@ services:
     volumes:
       - ./db:/var/lib/postgresql/data
 
-#  es:
-#    restart: always
-#    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.4.2
-#    environment:
-#      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-#    networks:
-#      - internal_network
-#    volumes:
-#      - ./elasticsearch:/usr/share/elasticsearch/data
+ # es:
+ #   restart: always
+ #   image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.4.2
+ #   environment:
+ #     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+ #   networks:
+ #     - internal_network
+ #   volumes:
+ #     - ./elasticsearch:/usr/share/elasticsearch/data
 
 networks:
   internal_network:
