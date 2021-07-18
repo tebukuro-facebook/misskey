@@ -55,7 +55,7 @@ url: https://example.tld/
 #───┘ PostgreSQL configuration └────────────────────────────────
 
 db:
-  host: localhost
+  host: db
   port: 5432
 
   # Database name
@@ -67,7 +67,6 @@ db:
 
   # Whether disable Caching queries
   #disableCache: true
-
   # Extra Connection options
   #extra:
   #  ssl: true
@@ -76,7 +75,7 @@ db:
 #───┘ Redis configuration └─────────────────────────────────────
 
 redis:
-  host: localhost
+  host: redis
   port: 6379
   #pass: example-pass
   #prefix: example-prefix
@@ -86,11 +85,11 @@ redis:
 #───┘ Elasticsearch configuration └─────────────────────────────
 
 #elasticsearch:
-#  host: localhost
+#  host: es
 #  port: 9200
 #  ssl: false
-#  user: 
-#  pass: 
+#  user:
+#  pass:
 
 #   ┌───────────────┐
 #───┘ ID generation └───────────────────────────────────────────
@@ -108,8 +107,7 @@ redis:
 # ONCE YOU HAVE STARTED THE INSTANCE, DO NOT CHANGE THE
 # ID SETTINGS AFTER THAT!
 
-id: 'aid'
-
+id: "aid"
 #   ┌─────────────────────┐
 #───┘ Other configuration └─────────────────────────────────────
 
