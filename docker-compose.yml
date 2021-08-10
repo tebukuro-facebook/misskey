@@ -13,11 +13,13 @@ services:
       - external_network
       - internal_network
     environment:
-      DOMAINS: 'misskey.tebukuro.xyz -> http://web:3000'
-      STAGE: 'production'
+      DOMAINS: 'misskey.tebukuro.xyz -> http://web:3000, files.misskey.tebukuro.xyz -> http://web:3000'
+      # STAGE: 'production'
       WEBSOCKET: 'true'
       # FORCE_RENEW: 'true'
-  
+    volumes:
+      - ./.config/nginx:/var/lib/nginx-conf/files.misskey.tebukuro.xyz.ssl.conf.erb:ro
+
   web:
     build: .
     restart: always
