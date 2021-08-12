@@ -1,9 +1,23 @@
 version: "3"
 
 services:
+  https-portal:
+    image: steveltn/https-portal:1
+    ports:
+      - '80:80'
+      - '443:443'
+    links:
+      - web
+    networks:
+      - external_network
+      - internal_network
+    environment:
+      DOMAINS: 'localhost -> http://web:3000'
+      STAGE: 'local'
+      WEBSOCKET: 'true'
+      # FORCE_RENEW: 'true'
   web:
     build: .
-    restart: always
     links:
       - db
       - redis
@@ -19,7 +33,6 @@ services:
       - ./files:/misskey/files
 
   redis:
-    restart: always
     image: redis:4.0-alpine
     networks:
       - internal_network
@@ -27,7 +40,6 @@ services:
       - ./redis:/data
 
   db:
-    restart: always
     image: postgres:12.2-alpine
     networks:
       - internal_network
@@ -37,7 +49,6 @@ services:
       - ./db:/var/lib/postgresql/data
 
   # es:
-  #   restart: always
   #   image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.4.2
   #   environment:
   #     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
