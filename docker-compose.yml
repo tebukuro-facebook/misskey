@@ -17,7 +17,7 @@ services:
       STAGE: 'production'
       WEBSOCKET: 'true'
       # FORCE_RENEW: 'true'
-  
+
   web:
     build: .
     restart: always
