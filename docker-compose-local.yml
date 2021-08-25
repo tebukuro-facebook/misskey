@@ -1,27 +1,12 @@
 version: "3"
 
 services:
-  https-portal:
-    image: steveltn/https-portal:1
-    ports:
-      - '80:80'
-      - '443:443'
-    links:
-      - web
-    networks:
-      - external_network
-      - internal_network
-    environment:
-      DOMAINS: 'localhost -> http://web:3000'
-      STAGE: 'local'
-      WEBSOCKET: 'true'
-      # FORCE_RENEW: 'true'
   web:
     build: .
     links:
       - db
       - redis
-      #  - es
+      # - es
     expose:
       - 3000
     ports:
