@@ -1,0 +1,13 @@
+name: docker-build
+
+on:
+  push:
+    branches:
+      - tebukuro
+jobs:
+  build_docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - uses: isbang/compose-action@v1.0.0
