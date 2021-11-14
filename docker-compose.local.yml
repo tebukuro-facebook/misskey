@@ -16,6 +16,7 @@ services:
       - external_network
     volumes:
       - ./files:/misskey/files
+      - ./.config:/misskey/.config:ro
 
   redis:
     image: redis:4.0-alpine
