@@ -7,10 +7,9 @@ The fork of [Misskey](https://github.com/syuilo/misskey)
 
 <div align="center">
 
-[![Dependencies](https://img.shields.io/david/misskey-dev/misskey.svg?style=for-the-badge&logo=npm)](https://david-dm.org/misskey-dev/misskey)
+[![build-test](https://github.com/tebukuro-facebook/misskey/workflows/docker-build/badge.svg)](https://github.com/tebukuro-facebook/misskey/actions/workflows/docker-build.yml)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge&logo=github)](http://makeapullrequest.com)
 [![Awesome Humane Tech](https://raw.githubusercontent.com/humanetech-community/awesome-humane-tech/main/humane-tech-badge.svg?sanitize=true)](https://github.com/humanetech-community/awesome-humane-tech)
-
 
 <a href="https://join.misskey.page/">Misskey</a> is a decentralized microblogging platform born on Earth.
 
@@ -53,17 +52,10 @@ Organize and store your files! Want to post a picture you have already uploaded?
 
 :package: Create your own instance
 ----------------------------------------------------------------
-Please see the [Setup and Installation Guide](https://misskey-hub.net/docs/install/install.html).
+Please see the [Setup and Installation Guide](https://misskey-hub.net/docs/install.html).
 
 :wrench: Contribution
 ----------------------------------------------------------------
 Please see the [Contribution Guide](./CONTRIBUTING.md).
-
----
-
-- 環境構築方法
-
-  - Please see the [Setup and Installation Guide](./docs/setup.en.md).([日本語版](./docs/setup.ja.md))
-  - [Dockerを使ったMisskey構築方法](./docs/docker.ja.md)
 
 ### Collaborators
