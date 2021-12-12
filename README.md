@@ -18,7 +18,19 @@ The fork of [Misskey](https://github.com/syuilo/misskey)
 ---
 :sparkles: Features
 
----
+## ✨ Features
+- **ActivityPub support**\
+	It is possible to interact with other software.
+- **Reactions**\
+	You can add "reactions" to each post, making it easy for you to express your feelings.
+- **Drive**\
+	An interface to manage uploaded files such as images, videos, sounds, etc.
+	You can also organize your favorite content into folders, making it easy to share again.
+- **Rich Web UI**\
+	Misskey has a rich WebUI by default.
+	It is highly customizable by flexibly changing the layout and installing various widgets and themes.
+	Furthermore, plug-ins can be created using AiScript, a original programming language.
+- and more...
 
 <h3>Posting</h3>
 <p>
