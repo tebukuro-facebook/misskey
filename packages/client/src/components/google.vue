@@ -26,7 +26,7 @@ export default defineComponent({
 	},
 	methods: {
 		search() {
-			window.open(`https://www.google.com/search?q=${this.query}`, '_blank');
+			window.open(`https://duckduckgo.com/?q=${this.query}`, '_blank');
 		}
 	}
 });
