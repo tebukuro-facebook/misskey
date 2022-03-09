@@ -2,22 +2,22 @@
   <div class="mk-google">
     <input v-model="query" type="search" :placeholder="q" />
     <button @click="search">
-      <i class="fas fa-search"></i> {{ $ts.search }}
+      <i class="fas fa-search"></i> {{ $ts.searchByGoogle }}
     </button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref } from "vue";
 
 const props = defineProps<{
-	q: string;
+  q: string;
 }>();
 
 const query = ref(props.q);
 
 const search = () => {
-	window.open(`https://duckduckgo.com/?q=${query.value}`, '_blank');
+  window.open(`https://duckduckgo.com/?q=${query.value}`, "_blank");
 };
 </script>
 
