@@ -1,5 +1,5 @@
 <template>
-<XWindow ref="window" :initial-width="400" :initial-height="500" :can-resize="true" @closed="emit('closed')">
+<XWindow ref="uiWindow" :initial-width="400" :initial-height="500" :can-resize="true" @closed="emit('closed')">
 	<template #header>
 		<i class="fas fa-exclamation-circle" style="margin-right: 0.5em;"></i>
 		<I18n :src="i18n.ts.reportAbuseOf" tag="span">
@@ -37,10 +37,10 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-	(e: 'closed'): void;
+	(ev: 'closed'): void;
 }>();
 
-const window = ref<InstanceType<typeof XWindow>>();
+const uiWindow = ref<InstanceType<typeof XWindow>>();
 const comment = ref(props.initialComment || '');
 
 function send() {
@@ -52,7 +52,7 @@ function send() {
 			type: 'success',
 			text: i18n.ts.abuseReported
 		});
-		window.value?.close();
+		uiWindow.value?.close();
 		emit('closed');
 	});
 }

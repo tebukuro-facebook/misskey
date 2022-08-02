@@ -1,5 +1,6 @@
 <template>
-<div v-size="{ max: [310, 500] }" class="gafaadew"
+<div
+	v-size="{ max: [310, 500] }" class="gafaadew"
 	:class="{ modal, _popup: modal }"
 	@dragover.stop="onDragover"
 	@dragenter="onDragenter"
@@ -11,7 +12,7 @@
 		<button v-click-anime v-tooltip="i18n.ts.switchAccount" class="account _button" @click="openAccountMenu">
 			<MkAvatar :user="postAccount ?? $i" class="avatar"/>
 		</button>
-		<div>
+		<div class="right">
 			<span class="text-count" :class="{ over: textLength > maxTextLength }">{{ maxTextLength - textLength }}</span>
 			<span v-if="localOnly" class="local-only"><i class="fas fa-biohazard"></i></span>
 			<button ref="visibilityButton" v-tooltip="i18n.ts.visibility" class="_button visibility" :disabled="channel != null" @click="setVisibility">
@@ -62,12 +63,14 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, watch, nextTick, onMounted } from 'vue';
+import { inject, watch, nextTick, onMounted, defineAsyncComponent } from 'vue';
 import * as mfm from 'mfm-js';
 import * as misskey from 'misskey-js';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import { length } from 'stringz';
 import { toASCII } from 'punycode/';
+import * as Acct from 'misskey-js/built/acct';
+import { throttle } from 'throttle-debounce';
 import XNoteSimple from './note-simple.vue';
 import XNotePreview from './note-preview.vue';
 import XPostFormAttaches from './post-form-attaches.vue';
@@ -75,18 +78,17 @@ import XPollEditor from './poll-editor.vue';
 import { host, url } from '@/config';
 import { erase, unique } from '@/scripts/array';
 import { extractMentions } from '@/scripts/extract-mentions';
-import * as Acct from 'misskey-js/built/acct';
 import { formatTimeString } from '@/scripts/format-time-string';
 import { Autocomplete } from '@/scripts/autocomplete';
 import * as os from '@/os';
 import { stream } from '@/stream';
 import { selectFiles } from '@/scripts/select-file';
 import { defaultStore, notePostInterruptors, postFormActions } from '@/store';
-import { throttle } from 'throttle-debounce';
 import MkInfo from '@/components/ui/info.vue';
 import { i18n } from '@/i18n';
 import { instance } from '@/instance';
 import { $i, getAccounts, openAccountMenu as openAccountMenu_ } from '@/account';
+import { uploadFile } from '@/scripts/upload';
 
 const modal = inject('modal');
 
@@ -106,7 +108,7 @@ const props = withDefaults(defineProps<{
 	fixed?: boolean;
 	autofocus?: boolean;
 }>(), {
-	initialVisibleUsers: [],
+	initialVisibleUsers: () => [],
 	autofocus: true,
 });
 
@@ -180,7 +182,7 @@ const placeholder = $computed((): string => {
 			i18n.ts._postForm._placeholders.c,
 			i18n.ts._postForm._placeholders.d,
 			i18n.ts._postForm._placeholders.e,
-			i18n.ts._postForm._placeholders.f
+			i18n.ts._postForm._placeholders.f,
 		];
 		return xs[Math.floor(Math.random() * xs.length)];
 	}
@@ -227,7 +229,7 @@ if (props.mention) {
 	text += ' ';
 }
 
-if (props.reply && (props.reply.user.username != $i.username || (props.reply.user.host != null && props.reply.user.host != host))) {
+if (props.reply && (props.reply.user.username !== $i.username || (props.reply.user.host != null && props.reply.user.host !== host))) {
 	text = `@${props.reply.user.username}${props.reply.user.host != null ? '@' + toASCII(props.reply.user.host) : ''} `;
 }
 
@@ -237,17 +239,16 @@ if (props.reply && props.reply.text != null) {
 
 	for (const x of extractMentions(ast)) {
 		const mention = x.host ?
-											`@${x.username}@${toASCII(x.host)}` :
-											(otherHost == null || otherHost == host) ?
-												`@${x.username}` :
-												`@${x.username}@${toASCII(otherHost)}`;
+			`@${x.username}@${toASCII(x.host)}` :
+			(otherHost == null || otherHost === host) ?
+				`@${x.username}` :
+				`@${x.username}@${toASCII(otherHost)}`;
 
 		// 自分は除外
-		if ($i.username == x.username && x.host == null) continue;
-		if ($i.username == x.username && x.host == host) continue;
+		if ($i.username === x.username && (x.host == null || x.host === host)) continue;
 
 		// 重複は除外
-		if (text.indexOf(`${mention} `) != -1) continue;
+		if (text.includes(`${mention} `)) continue;
 
 		text += `${mention} `;
 	}
@@ -263,7 +264,7 @@ if (props.reply && ['home', 'followers', 'specified'].includes(props.reply.visib
 	visibility = props.reply.visibility;
 	if (props.reply.visibility === 'specified') {
 		os.api('users/show', {
-			userIds: props.reply.visibleUserIds.filter(uid => uid !== $i.id && uid !== props.reply.userId)
+			userIds: props.reply.visibleUserIds.filter(uid => uid !== $i.id && uid !== props.reply.userId),
 		}).then(users => {
 			users.forEach(pushVisibleUser);
 		});
@@ -302,7 +303,7 @@ function checkMissingMention() {
 		const ast = mfm.parse(text);
 
 		for (const x of extractMentions(ast)) {
-			if (!visibleUsers.some(u => (u.username === x.username) && (u.host == x.host))) {
+			if (!visibleUsers.some(u => (u.username === x.username) && (u.host === x.host))) {
 				hasNotSpecifiedMentions = true;
 				return;
 			}
@@ -315,7 +316,7 @@ function addMissingMention() {
 	const ast = mfm.parse(text);
 
 	for (const x of extractMentions(ast)) {
-		if (!visibleUsers.some(u => (u.username === x.username) && (u.host == x.host))) {
+		if (!visibleUsers.some(u => (u.username === x.username) && (u.host === x.host))) {
 			os.api('users/show', { username: x.username, host: x.host }).then(user => {
 				visibleUsers.push(user);
 			});
@@ -356,7 +357,7 @@ function chooseFileFrom(ev) {
 }
 
 function detachFile(id) {
-	files = files.filter(x => x.id != id);
+	files = files.filter(x => x.id !== id);
 }
 
 function updateFiles(_files) {
@@ -372,7 +373,7 @@ function updateFileName(file, name) {
 }
 
 function upload(file: File, name?: string) {
-	os.upload(file, defaultStore.state.uploadFolder, name).then(res => {
+	uploadFile(file, defaultStore.state.uploadFolder, name).then(res => {
 		files.push(res);
 	});
 }
@@ -383,7 +384,7 @@ function setVisibility() {
 		return;
 	}
 
-	os.popup(import('./visibility-picker.vue'), {
+	os.popup(defineAsyncComponent(() => import('./visibility-picker.vue')), {
 		currentVisibility: visibility,
 		currentLocalOnly: localOnly,
 		src: visibilityButton,
@@ -399,7 +400,7 @@ function setVisibility() {
 			if (defaultStore.state.rememberNoteVisibility) {
 				defaultStore.set('localOnly', localOnly);
 			}
-		}
+		},
 	}, 'closed');
 }
 
@@ -426,24 +427,24 @@ function clear() {
 	quoteId = null;
 }
 
-function onKeydown(e: KeyboardEvent) {
-	if ((e.which === 10 || e.which === 13) && (e.ctrlKey || e.metaKey) && canPost) post();
-	if (e.which === 27) emit('esc');
+function onKeydown(ev: KeyboardEvent) {
+	if ((ev.which === 10 || ev.which === 13) && (ev.ctrlKey || ev.metaKey) && canPost) post();
+	if (ev.which === 27) emit('esc');
 	typing();
 }
 
-function onCompositionUpdate(e: CompositionEvent) {
-	imeText = e.data;
+function onCompositionUpdate(ev: CompositionEvent) {
+	imeText = ev.data;
 	typing();
 }
 
-function onCompositionEnd(e: CompositionEvent) {
+function onCompositionEnd(ev: CompositionEvent) {
 	imeText = '';
 }
 
-async function onPaste(e: ClipboardEvent) {
-	for (const { item, i } of Array.from(e.clipboardData.items).map((item, i) => ({item, i}))) {
-		if (item.kind == 'file') {
+async function onPaste(ev: ClipboardEvent) {
+	for (const { item, i } of Array.from(ev.clipboardData.items).map((item, i) => ({ item, i }))) {
+		if (item.kind === 'file') {
 			const file = item.getAsFile();
 			const lio = file.name.lastIndexOf('.');
 			const ext = lio >= 0 ? file.name.slice(lio) : '';
@@ -452,10 +453,10 @@ async function onPaste(e: ClipboardEvent) {
 		}
 	}
 
-	const paste = e.clipboardData.getData('text');
+	const paste = ev.clipboardData.getData('text');
 
 	if (!props.renote && !quoteId && paste.startsWith(url + '/notes/')) {
-		e.preventDefault();
+		ev.preventDefault();
 
 		os.confirm({
 			type: 'info',
@@ -471,49 +472,49 @@ async function onPaste(e: ClipboardEvent) {
 	}
 }
 
-function onDragover(e) {
-	if (!e.dataTransfer.items[0]) return;
-	const isFile = e.dataTransfer.items[0].kind == 'file';
-	const isDriveFile = e.dataTransfer.types[0] == _DATA_TRANSFER_DRIVE_FILE_;
+function onDragover(ev) {
+	if (!ev.dataTransfer.items[0]) return;
+	const isFile = ev.dataTransfer.items[0].kind === 'file';
+	const isDriveFile = ev.dataTransfer.types[0] === _DATA_TRANSFER_DRIVE_FILE_;
 	if (isFile || isDriveFile) {
-		e.preventDefault();
+		ev.preventDefault();
 		draghover = true;
-		e.dataTransfer.dropEffect = e.dataTransfer.effectAllowed == 'all' ? 'copy' : 'move';
+		ev.dataTransfer.dropEffect = ev.dataTransfer.effectAllowed === 'all' ? 'copy' : 'move';
 	}
 }
 
-function onDragenter(e) {
+function onDragenter(ev) {
 	draghover = true;
 }
 
-function onDragleave(e) {
+function onDragleave(ev) {
 	draghover = false;
 }
 
-function onDrop(e): void {
+function onDrop(ev): void {
 	draghover = false;
 
 	// ファイルだったら
-	if (e.dataTransfer.files.length > 0) {
-		e.preventDefault();
-		for (const x of Array.from(e.dataTransfer.files)) upload(x);
+	if (ev.dataTransfer.files.length > 0) {
+		ev.preventDefault();
+		for (const x of Array.from(ev.dataTransfer.files)) upload(x);
 		return;
 	}
 
 	//#region ドライブのファイル
-	const driveFile = e.dataTransfer.getData(_DATA_TRANSFER_DRIVE_FILE_);
-	if (driveFile != null && driveFile != '') {
+	const driveFile = ev.dataTransfer.getData(_DATA_TRANSFER_DRIVE_FILE_);
+	if (driveFile != null && driveFile !== '') {
 		const file = JSON.parse(driveFile);
 		files.push(file);
-		e.preventDefault();
+		ev.preventDefault();
 	}
 	//#endregion
 }
 
 function saveDraft() {
-	const data = JSON.parse(localStorage.getItem('drafts') || '{}');
+	const draftData = JSON.parse(localStorage.getItem('drafts') || '{}');
 
-	data[draftKey] = {
+	draftData[draftKey] = {
 		updatedAt: new Date(),
 		data: {
 			text: text,
@@ -522,24 +523,24 @@ function saveDraft() {
 			visibility: visibility,
 			localOnly: localOnly,
 			files: files,
-			poll: poll
-		}
+			poll: poll,
+		},
 	};
 
-	localStorage.setItem('drafts', JSON.stringify(data));
+	localStorage.setItem('drafts', JSON.stringify(draftData));
 }
 
 function deleteDraft() {
-	const data = JSON.parse(localStorage.getItem('drafts') || '{}');
+	const draftData = JSON.parse(localStorage.getItem('drafts') || '{}');
 
-	delete data[draftKey];
+	delete draftData[draftKey];
 
-	localStorage.setItem('drafts', JSON.stringify(data));
+	localStorage.setItem('drafts', JSON.stringify(draftData));
 }
 
 async function post() {
-	let data = {
-		text: text == '' ? undefined : text,
+	let postData = {
+		text: text === '' ? undefined : text,
 		fileIds: files.length > 0 ? files.map(f => f.id) : undefined,
 		replyId: props.reply ? props.reply.id : undefined,
 		renoteId: props.renote ? props.renote.id : quoteId ? quoteId : undefined,
@@ -548,18 +549,18 @@ async function post() {
 		cw: useCw ? cw || '' : undefined,
 		localOnly: localOnly,
 		visibility: visibility,
-		visibleUserIds: visibility == 'specified' ? visibleUsers.map(u => u.id) : undefined,
+		visibleUserIds: visibility === 'specified' ? visibleUsers.map(u => u.id) : undefined,
 	};
 
 	if (withHashtags && hashtags && hashtags.trim() !== '') {
 		const hashtags_ = hashtags.trim().split(' ').map(x => x.startsWith('#') ? x : '#' + x).join(' ');
-		data.text = data.text ? `${data.text} ${hashtags_}` : hashtags_;
+		postData.text = postData.text ? `${postData.text} ${hashtags_}` : hashtags_;
 	}
 
 	// plugin
 	if (notePostInterruptors.length > 0) {
 		for (const interruptor of notePostInterruptors) {
-			data = await interruptor.handler(JSON.parse(JSON.stringify(data)));
+			postData = await interruptor.handler(JSON.parse(JSON.stringify(postData)));
 		}
 	}
 
@@ -571,13 +572,13 @@ async function post() {
 	}
 
 	posting = true;
-	os.api('notes/create', data, token).then(() => {
+	os.api('notes/create', postData, token).then(() => {
 		clear();
 		nextTick(() => {
 			deleteDraft();
 			emit('posted');
-			if (data.text && data.text != '') {
-				const hashtags_ = mfm.parse(data.text).filter(x => x.type === 'hashtag').map(x => x.props.hashtag);
+			if (postData.text && postData.text !== '') {
+				const hashtags_ = mfm.parse(postData.text).filter(x => x.type === 'hashtag').map(x => x.props.hashtag);
 				const history = JSON.parse(localStorage.getItem('hashtags') || '[]') as string[];
 				localStorage.setItem('hashtags', JSON.stringify(unique(hashtags_.concat(history))));
 			}
@@ -612,11 +613,11 @@ function showActions(ev) {
 		text: action.title,
 		action: () => {
 			action.handler({
-				text: text
+				text: text,
 			}, (key, value) => {
 				if (key === 'text') { text = value; }
 			});
-		}
+		},
 	})), ev.currentTarget ?? ev.target);
 }
 
@@ -661,7 +662,7 @@ onMounted(() => {
 				cw = draft.data.cw;
 				visibility = draft.data.visibility;
 				localOnly = draft.data.localOnly;
-				files = (draft.data.files || []).filter(e => e);
+				files = (draft.data.files || []).filter(draftFile => draftFile);
 				if (draft.data.poll) {
 					poll = draft.data.poll;
 				}
@@ -726,7 +727,7 @@ onMounted(() => {
 			}
 		}
 
-		> div {
+		> .right {
 			position: absolute;
 			top: 0;
 			right: 0;
@@ -924,7 +925,7 @@ onMounted(() => {
 				line-height: 50px;
 			}
 
-			> div {
+			> .right {
 				> .text-count {
 					line-height: 50px;
 				}

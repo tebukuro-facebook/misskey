@@ -1,16 +1,16 @@
 <template>
 <transition :name="$store.state.animation ? 'fade' : ''" appear>
 	<div ref="rootEl" class="nvlagfpb" :style="{ zIndex }" @contextmenu.prevent.stop="() => {}">
-		<MkMenu :items="items" class="_popup _shadow" :align="'left'" @close="$emit('closed')"/>
+		<MkMenu :items="items" :align="'left'" @close="$emit('closed')"/>
 	</div>
 </transition>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, onBeforeUnmount } from 'vue';
-import contains from '@/scripts/contains';
 import MkMenu from './menu.vue';
 import { MenuItem } from './types/menu.vue';
+import contains from '@/scripts/contains';
 import * as os from '@/os';
 
 const props = defineProps<{
@@ -19,7 +19,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-	(e: 'closed'): void;
+	(ev: 'closed'): void;
 }>();
 
 let rootEl = $ref<HTMLDivElement>();
@@ -63,8 +63,8 @@ onBeforeUnmount(() => {
 	}
 });
 
-function onMousedown(e: Event) {
-	if (!contains(rootEl, e.target) && (rootEl != e.target)) emit('closed');
+function onMousedown(evt: Event) {
+	if (!contains(rootEl, evt.target) && (rootEl !== evt.target)) emit('closed');
 }
 </script>
 

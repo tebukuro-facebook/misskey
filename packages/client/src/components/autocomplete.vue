@@ -20,6 +20,7 @@
 			<span v-if="emoji.isCustomEmoji" class="emoji"><img :src="defaultStore.state.disableShowingAnimatedImages ? getStaticImageUrl(emoji.url) : emoji.url" :alt="emoji.emoji"/></span>
 			<span v-else-if="!defaultStore.state.useOsNativeEmojis" class="emoji"><img :src="emoji.url" :alt="emoji.emoji"/></span>
 			<span v-else class="emoji">{{ emoji.emoji }}</span>
+			<!-- eslint-disable-next-line vue/no-v-html -->
 			<span class="name" v-html="emoji.name.replace(q, `<b>${q}</b>`)"></span>
 			<span v-if="emoji.aliasOf" class="alias">({{ emoji.aliasOf }})</span>
 		</li>
@@ -35,6 +36,7 @@
 <script lang="ts">
 import { markRaw, ref, onUpdated, onMounted, onBeforeUnmount, nextTick, watch } from 'vue';
 import contains from '@/scripts/contains';
+import { char2filePath } from '@/scripts/twemoji-base';
 import { getStaticImageUrl } from '@/scripts/get-static-image-url';
 import { acct } from '@/filters/user';
 import * as os from '@/os';
@@ -42,7 +44,6 @@ import { MFM_TAGS } from '@/scripts/mfm-tags';
 import { defaultStore } from '@/store';
 import { emojilist } from '@/scripts/emojilist';
 import { instance } from '@/instance';
-import { twemojiSvgBase } from '@/scripts/twemoji-base';
 import { i18n } from '@/i18n';
 
 type EmojiDef = {
@@ -55,16 +56,10 @@ type EmojiDef = {
 
 const lib = emojilist.filter(x => x.category !== 'flags');
 
-const char2file = (char: string) => {
-	let codes = Array.from(char).map(x => x.codePointAt(0)?.toString(16));
-	if (!codes.includes('200d')) codes = codes.filter(x => x !== 'fe0f');
-	return codes.filter(x => x && x.length).join('-');
-};
-
 const emjdb: EmojiDef[] = lib.map(x => ({
 	emoji: x.char,
 	name: x.name,
-	url: `${twemojiSvgBase}/${char2file(x.char)}.svg`
+	url: char2filePath(x.char),
 }));
 
 for (const x of lib) {
@@ -74,7 +69,7 @@ for (const x of lib) {
 				emoji: x.char,
 				name: k,
 				aliasOf: x.name,
-				url: `${twemojiSvgBase}/${char2file(x.char)}.svg`
+				url: char2filePath(x.char),
 			});
 		}
 	}
@@ -131,8 +126,8 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-	(e: 'done', v: { type: string; value: any }): void;
-	(e: 'closed'): void;
+	(event: 'done', value: { type: string; value: any }): void;
+	(event: 'closed'): void;
 }>();
 
 const suggests = ref<Element>();
@@ -152,7 +147,7 @@ function complete(type: string, value: any) {
 	emit('closed');
 	if (type === 'emoji') {
 		let recents = defaultStore.state.recentlyUsedEmojis;
-		recents = recents.filter((e: any) => e !== value);
+		recents = recents.filter((emoji: any) => emoji !== value);
 		recents.unshift(value);
 		defaultStore.set('recentlyUsedEmojis', recents.splice(0, 32));
 	}
@@ -232,7 +227,7 @@ function exec() {
 	} else if (props.type === 'emoji') {
 		if (!props.q || props.q === '') {
 			// 最近使った絵文字をサジェスト
-			emojis.value = defaultStore.state.recentlyUsedEmojis.map(emoji => emojiDb.find(e => e.emoji === emoji)).filter(x => x) as EmojiDef[];
+			emojis.value = defaultStore.state.recentlyUsedEmojis.map(emoji => emojiDb.find(dbEmoji => dbEmoji.emoji === emoji)).filter(x => x) as EmojiDef[];
 			return;
 		}
 
@@ -269,17 +264,17 @@ function exec() {
 	}
 }
 
-function onMousedown(e: Event) {
-	if (!contains(rootEl.value, e.target) && (rootEl.value !== e.target)) props.close();
+function onMousedown(event: Event) {
+	if (!contains(rootEl.value, event.target) && (rootEl.value !== event.target)) props.close();
 }
 
-function onKeydown(e: KeyboardEvent) {
+function onKeydown(event: KeyboardEvent) {
 	const cancel = () => {
-		e.preventDefault();
-		e.stopPropagation();
+		event.preventDefault();
+		event.stopPropagation();
 	};
 
-	switch (e.key) {
+	switch (event.key) {
 		case 'Enter':
 			if (select.value !== -1) {
 				cancel();
@@ -310,7 +305,7 @@ function onKeydown(e: KeyboardEvent) {
 			break;
 
 		default:
-			e.stopPropagation();
+			event.stopPropagation();
 			props.textarea.focus();
 	}
 }

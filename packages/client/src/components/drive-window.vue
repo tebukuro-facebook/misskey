@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import {  } from 'vue';
+import { } from 'vue';
 import * as Misskey from 'misskey-js';
 import XDrive from './drive.vue';
 import XWindow from '@/components/ui/window.vue';
@@ -24,6 +24,6 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-	(e: 'closed'): void;
+	(ev: 'closed'): void;
 }>();
 </script>

@@ -760,6 +760,11 @@ pubSub: "Konta Pub/Sub"
 hide: "Ukryj"
 searchByGoogle: "Szukaj"
 indefinitely: "Nigdy"
+file: "Pliki"
+reverse: "Odwróć"
+colored: "Kolorowe"
+label: "Etykieta"
+account: "Konta"
 _ffVisibility:
   public: "Publikuj"
 _ad:
@@ -946,7 +951,6 @@ _sfx:
   chatBg: "Rozmowy (tło)"
   channel: "Powiadomienia kanału"
 _ago:
-  unknown: "Nieznane"
   future: "W przyszłości"
   justNow: "Przed chwilą"
   secondsAgo: "{n} sek. temu"
@@ -1401,11 +1405,12 @@ _notification:
     followRequestAccepted: "Przyjęto prośbę o możliwość obserwacji"
     groupInvited: "Zaproszono do grup"
     app: "Powiadomienia z aplikacji"
+  _actions:
+    reply: "Odpowiedz"
+    renote: "Udostępnij"
 _deck:
   alwaysShowMainColumn: "Zawsze pokazuj główną kolumnę"
   columnAlign: "Wyrównaj kolumny"
-  columnMargin: "Odstęp między kolumnami"
-  columnHeaderHeight: "Wysokość nagłówka kolumny"
   addColumn: "Dodaj kolumnę"
   swapLeft: "Przesuń w lewo"
   swapRight: "Przesuń w prawo"

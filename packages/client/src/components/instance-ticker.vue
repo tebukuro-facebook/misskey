@@ -8,6 +8,7 @@
 <script lang="ts" setup>
 import { } from 'vue';
 import { instanceName } from '@/config';
+import { instance as Instance } from '@/instance';
 
 const props = defineProps<{
 	instance?: {
@@ -19,7 +20,7 @@ const props = defineProps<{
 
 // if no instance data is given, this is for the local instance
 const instance = props.instance ?? {
-	faviconUrl: '/favicon.ico',
+	faviconUrl: Instance.iconUrl || Instance.faviconUrl || '/favicon.ico',
 	name: instanceName,
 	themeColor: (document.querySelector('meta[name="theme-color-orig"]') as HTMLMetaElement)?.content
 };
@@ -39,6 +40,19 @@ const bg = {
 	border-radius: 4px 0 0 4px;
 	overflow: hidden;
 	color: #fff;
+	text-shadow: /* .866 ≈ sin(60deg) */
+		1px 0 1px #000,
+		.866px .5px 1px #000,
+		.5px .866px 1px #000,
+		0 1px 1px #000,
+		-.5px .866px 1px #000,
+		-.866px .5px 1px #000,
+		-1px 0 1px #000,
+		-.866px -.5px 1px #000,
+		-.5px -.866px 1px #000,
+		0 -1px 1px #000,
+		.5px -.866px 1px #000,
+		.866px -.5px 1px #000;
 
 	> .icon {
 		height: 100%;

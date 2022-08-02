@@ -11,7 +11,7 @@
 	<div class="tbhwbxda">
 		<div class="form">
 			<FormSplit :min-width="170">
-				<MkInput ref="usernameEl" v-model="username" @update:modelValue="search">
+				<MkInput v-model="username" :autofocus="true" @update:modelValue="search">
 					<template #label>{{ $ts.username }}</template>
 					<template #prefix>@</template>
 				</MkInput>
@@ -60,9 +60,9 @@ import * as os from '@/os';
 import { defaultStore } from '@/store';
 
 const emit = defineEmits<{
-  (e: 'ok', selected: misskey.entities.UserDetailed): void;
-  (e: 'cancel'): void;
-	(e: 'closed'): void;
+	(ev: 'ok', selected: misskey.entities.UserDetailed): void;
+	(ev: 'cancel'): void;
+	(ev: 'closed'): void;
 }>();
 
 let username = $ref('');
@@ -70,14 +70,7 @@ let host = $ref('');
 let users: misskey.entities.UserDetailed[] = $ref([]);
 let recentUsers: misskey.entities.UserDetailed[] = $ref([]);
 let selected: misskey.entities.UserDetailed | null = $ref(null);
-let usernameEl: HTMLElement = $ref();
 let dialogEl = $ref();
-
-const focus = () => {
-	if (usernameEl) {
-		usernameEl.focus();
-	}
-};
 
 const search = () => {
 	if (username === '' && host === '') {
@@ -112,12 +105,6 @@ const cancel = () => {
 };
 
 onMounted(() => {
-	focus();
-
-	nextTick(() => {
-		focus();
-	});
-
 	os.api('users/show', {
 		userIds: defaultStore.state.recentlyUsedUsers,
 	}).then(users => {

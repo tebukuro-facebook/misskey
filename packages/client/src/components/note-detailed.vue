@@ -2,9 +2,9 @@
 <div
 	v-if="!muted"
 	v-show="!isDeleted"
+	ref="el"
 	v-hotkey="keymap"
 	v-size="{ max: [500, 450, 350, 300] }"
-	ref="el"
 	class="lxwezrsl _block"
 	:tabindex="!isDeleted ? '-1' : null"
 	:class="{ renote: isRenote }"
@@ -26,12 +26,7 @@
 				<i v-if="isMyRenote" class="fas fa-ellipsis-h dropdownIcon"></i>
 				<MkTime :time="note.createdAt"/>
 			</button>
-			<span v-if="note.visibility !== 'public'" class="visibility">
-				<i v-if="note.visibility === 'home'" class="fas fa-home"></i>
-				<i v-else-if="note.visibility === 'followers'" class="fas fa-unlock"></i>
-				<i v-else-if="note.visibility === 'specified'" class="fas fa-envelope"></i>
-			</span>
-			<span v-if="note.localOnly" class="localOnly"><i class="fas fa-biohazard"></i></span>
+			<MkVisibility :note="note"/>
 		</div>
 	</div>
 	<article class="article" @contextmenu.stop="onContextmenu">
@@ -43,12 +38,9 @@
 						<MkUserName :user="appearNote.user"/>
 					</MkA>
 					<span v-if="appearNote.user.isBot" class="is-bot">bot</span>
-					<span v-if="appearNote.visibility !== 'public'" class="visibility">
-						<i v-if="appearNote.visibility === 'home'" class="fas fa-home"></i>
-						<i v-else-if="appearNote.visibility === 'followers'" class="fas fa-unlock"></i>
-						<i v-else-if="appearNote.visibility === 'specified'" class="fas fa-envelope"></i>
-					</span>
-					<span v-if="appearNote.localOnly" class="localOnly"><i class="fas fa-biohazard"></i></span>
+					<div class="info">
+						<MkVisibility :note="appearNote"/>
+					</div>
 				</div>
 				<div class="username"><MkAcct :user="appearNote.user"/></div>
 				<MkInstanceTicker v-if="showTicker" class="ticker" :instance="appearNote.user.instance"/>
@@ -134,6 +126,7 @@ import XPoll from './poll.vue';
 import XRenoteButton from './renote-button.vue';
 import MkUrlPreview from '@/components/url-preview.vue';
 import MkInstanceTicker from '@/components/instance-ticker.vue';
+import MkVisibility from '@/components/visibility.vue';
 import { pleaseLogin } from '@/scripts/please-login';
 import { checkWordMute } from '@/scripts/check-word-mute';
 import { userPage } from '@/filters/user';
@@ -197,7 +190,7 @@ const keymap = {
 	'q': () => renoteButton.value.renote(true),
 	'esc': blur,
 	'm|o': () => menu(true),
-	's': () => showContent.value != showContent.value,
+	's': () => showContent.value !== showContent.value,
 };
 
 useNoteCapture({
@@ -222,7 +215,7 @@ function react(viaKeyboard = false): void {
 	reactionPicker.show(reactButton.value, reaction => {
 		os.api('notes/reactions/create', {
 			noteId: appearNote.id,
-			reaction: reaction
+			reaction: reaction,
 		});
 	}, () => {
 		focus();
@@ -233,7 +226,7 @@ function undoReact(note): void {
 	const oldReaction = note.myReaction;
 	if (!oldReaction) return;
 	os.api('notes/reactions/delete', {
-		noteId: note.id
+		noteId: note.id,
 	});
 }
 
@@ -251,13 +244,13 @@ function onContextmenu(ev: MouseEvent): void {
 		ev.preventDefault();
 		react();
 	} else {
-		os.contextMenu(getNoteMenu({ note: note, translating, translation, menuButton }), ev).then(focus);
+		os.contextMenu(getNoteMenu({ note: note, translating, translation, menuButton, isDeleted }), ev).then(focus);
 	}
 }
 
 function menu(viaKeyboard = false): void {
-	os.popupMenu(getNoteMenu({ note: note, translating, translation, menuButton }), menuButton.value, {
-		viaKeyboard
+	os.popupMenu(getNoteMenu({ note: note, translating, translation, menuButton, isDeleted }), menuButton.value, {
+		viaKeyboard,
 	}).then(focus);
 }
 
@@ -269,12 +262,12 @@ function showRenoteMenu(viaKeyboard = false): void {
 		danger: true,
 		action: () => {
 			os.api('notes/delete', {
-				noteId: note.id
+				noteId: note.id,
 			});
 			isDeleted.value = true;
-		}
+		},
 	}], renoteTime.value, {
-		viaKeyboard: viaKeyboard
+		viaKeyboard: viaKeyboard,
 	});
 }
 
@@ -288,14 +281,14 @@ function blur() {
 
 os.api('notes/children', {
 	noteId: appearNote.id,
-	limit: 30
+	limit: 30,
 }).then(res => {
 	replies.value = res;
 });
 
 if (appearNote.replyId) {
 	os.api('notes/conversation', {
-		noteId: appearNote.replyId
+		noteId: appearNote.replyId,
 	}).then(res => {
 		conversation.value = res.reverse();
 	});
@@ -388,14 +381,6 @@ if (appearNote.replyId) {
 					margin-right: 4px;
 				}
 			}
-
-			> .visibility {
-				margin-left: 8px;
-			}
-
-			> .localOnly {
-				margin-left: 8px;
-			}
 		}
 	}
 
@@ -405,7 +390,7 @@ if (appearNote.replyId) {
 
 	> .article {
 		padding: 32px;
-		font-size: 1.1em;
+		font-size: 1.2em;
 
 		> .header {
 			display: flex;
@@ -440,6 +425,10 @@ if (appearNote.replyId) {
 						font-size: 80%;
 						border: solid 0.5px var(--divider);
 						border-radius: 4px;
+					}
+
+					> .info {
+						float: right;
 					}
 				}
 			}
