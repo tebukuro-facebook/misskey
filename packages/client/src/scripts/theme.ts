@@ -25,6 +25,7 @@ export const getBuiltinThemes = () => Promise.all(
 		'l-vivid',
 		'l-cherry',
 		'l-sushi',
+		'l-u0',
 
 		'd-dark',
 		'd-persimmon',
@@ -35,6 +36,7 @@ export const getBuiltinThemes = () => Promise.all(
 		'd-green-orange',
 		'd-cherry',
 		'd-ice',
+		'd-u0',
 	].map(name => import(`../themes/${name}.json5`).then(({ default: _default }): Theme => _default)),
 );
 
@@ -54,6 +56,8 @@ export function applyTheme(theme: Theme, persist = true) {
 	timeout = window.setTimeout(() => {
 		document.documentElement.classList.remove('_themeChanging_');
 	}, 1000);
+
+	const colorSchema = theme.base === 'dark' ? 'dark' : 'light';
 
 	// Deep copy
 	const _theme = JSON.parse(JSON.stringify(theme));
@@ -76,8 +80,11 @@ export function applyTheme(theme: Theme, persist = true) {
 		document.documentElement.style.setProperty(`--${k}`, v.toString());
 	}
 
+	document.documentElement.style.setProperty('color-schema', colorSchema);
+
 	if (persist) {
 		localStorage.setItem('theme', JSON.stringify(props));
+		localStorage.setItem('colorSchema', colorSchema);
 	}
 
 	// 色計算など再度行えるようにクライアント全体に通知

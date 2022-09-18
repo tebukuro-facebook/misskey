@@ -4,11 +4,11 @@
 	<MkSpacer :content-max="600" :margin-min="16">
 		<FormSplit>
 			<MkKeyValue class="_formBlock">
-				<template #key>{{ $ts._registry.domain }}</template>
-				<template #value>{{ $ts.system }}</template>
+				<template #key>{{ i18n.ts._registry.domain }}</template>
+				<template #value>{{ i18n.ts.system }}</template>
 			</MkKeyValue>
 			<MkKeyValue class="_formBlock">
-				<template #key>{{ $ts._registry.scope }}</template>
+				<template #key>{{ i18n.ts._registry.scope }}</template>
 				<template #value>{{ scope.join('/') }}</template>
 			</MkKeyValue>
 		</FormSplit>
@@ -33,8 +33,8 @@ import { i18n } from '@/i18n';
 import { definePageMetadata } from '@/scripts/page-metadata';
 import FormLink from '@/components/form/link.vue';
 import FormSection from '@/components/form/section.vue';
-import MkButton from '@/components/ui/button.vue';
-import MkKeyValue from '@/components/key-value.vue';
+import MkButton from '@/components/MkButton.vue';
+import MkKeyValue from '@/components/MkKeyValue.vue';
 import FormSplit from '@/components/form/split.vue';
 
 const props = defineProps<{

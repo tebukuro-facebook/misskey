@@ -13,12 +13,12 @@
 				<div>
 					<MkInput v-model="searchQuery" :debounce="true" type="search" class="_formBlock">
 						<template #prefix><i class="fas fa-search"></i></template>
-						<template #label>{{ $ts.searchUser }}</template>
+						<template #label>{{ i18n.ts.searchUser }}</template>
 					</MkInput>
 					<MkRadios v-model="searchOrigin" class="_formBlock">
-						<option value="combined">{{ $ts.all }}</option>
-						<option value="local">{{ $ts.local }}</option>
-						<option value="remote">{{ $ts.remote }}</option>
+						<option value="combined">{{ i18n.ts.all }}</option>
+						<option value="local">{{ i18n.ts.local }}</option>
+						<option value="remote">{{ i18n.ts.remote }}</option>
 					</MkRadios>
 				</div>
 
@@ -33,7 +33,7 @@
 import { computed, watch } from 'vue';
 import XFeatured from './explore.featured.vue';
 import XUsers from './explore.users.vue';
-import MkFolder from '@/components/ui/folder.vue';
+import MkFolder from '@/components/MkFolder.vue';
 import MkInput from '@/components/form/input.vue';
 import MkRadios from '@/components/form/radios.vue';
 import number from '@/filters/number';
@@ -41,7 +41,7 @@ import * as os from '@/os';
 import { definePageMetadata } from '@/scripts/page-metadata';
 import { i18n } from '@/i18n';
 import { instance } from '@/instance';
-import XUserList from '@/components/user-list.vue';
+import XUserList from '@/components/MkUserList.vue';
 
 const props = defineProps<{
 	tag?: string;

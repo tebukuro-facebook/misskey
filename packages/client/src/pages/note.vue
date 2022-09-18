@@ -16,7 +16,7 @@
 							<XNoteDetailed :key="note.id" v-model:note="note" class="note"/>
 						</div>
 						<div v-if="clips && clips.length > 0" class="_content clips _gap">
-							<div class="title">{{ $ts.clip }}</div>
+							<div class="title">{{ i18n.ts.clip }}</div>
 							<MkA v-for="item in clips" :key="item.id" :to="`/clips/${item.id}`" class="item _panel _gap">
 								<b>{{ item.name }}</b>
 								<div v-if="item.description" class="description">{{ item.description }}</div>
@@ -43,11 +43,11 @@
 <script lang="ts" setup>
 import { computed, defineComponent, watch } from 'vue';
 import * as misskey from 'misskey-js';
-import XNote from '@/components/note.vue';
-import XNoteDetailed from '@/components/note-detailed.vue';
-import XNotes from '@/components/notes.vue';
-import MkRemoteCaution from '@/components/remote-caution.vue';
-import MkButton from '@/components/ui/button.vue';
+import XNote from '@/components/MkNote.vue';
+import XNoteDetailed from '@/components/MkNoteDetailed.vue';
+import XNotes from '@/components/MkNotes.vue';
+import MkRemoteCaution from '@/components/MkRemoteCaution.vue';
+import MkButton from '@/components/MkButton.vue';
 import * as os from '@/os';
 import { definePageMetadata } from '@/scripts/page-metadata';
 import { i18n } from '@/i18n';
