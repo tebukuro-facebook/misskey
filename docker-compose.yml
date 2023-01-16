@@ -7,9 +7,12 @@ services:
     links:
       - db
       - redis
-      # - es
-    expose:
-      - 3000
+#      - es
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     ports:
       - "3000:3000"
     networks:
@@ -26,6 +29,10 @@ services:
       - internal_network
     volumes:
       - ./redis:/data
+    healthcheck:
+      test: "redis-cli ping"
+      interval: 5s
+      retries: 20
 
   db:
     restart: always
@@ -36,6 +43,10 @@ services:
       - .config/docker.env
     volumes:
       - ./db:/var/lib/postgresql/data
+    healthcheck:
+      test: "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"
+      interval: 5s
+      retries: 20
 
 #  es:
 #    restart: always
