@@ -365,7 +365,7 @@ import { fetchCustomEmojis } from './custom-emojis';
 		const now = new Date();
 		const m = now.getMonth() + 1;
 		const d = now.getDate();
-		
+
 		if ($i.birthday) {
 			const bm = parseInt($i.birthday.split('-')[1]);
 			const bd = parseInt($i.birthday.split('-')[2]);
@@ -432,7 +432,7 @@ import { fetchCustomEmojis } from './custom-emojis';
 		if (claimedAchievements.length >= 30) {
 			claimAchievement('collectAchievements30');
 		}
-	
+
 		window.setInterval(() => {
 			if (Math.floor(Math.random() * 10000) === 0) {
 				claimAchievement('justPlainLucky');
@@ -459,7 +459,7 @@ import { fetchCustomEmojis } from './custom-emojis';
 		const neverShowDonationInfo = miLocalStorage.getItem('neverShowDonationInfo');
 		if (neverShowDonationInfo !== 'true' && (new Date($i.createdAt).getTime() < (Date.now() - (1000 * 60 * 60 * 24 * 3)))) {
 			if (latestDonationInfoShownAt == null || (new Date(latestDonationInfoShownAt).getTime() < (Date.now() - (1000 * 60 * 60 * 24 * 30)))) {
-				popup(defineAsyncComponent(() => import('@/components/MkDonation.vue')), {}, {}, 'closed');
+				// popup(defineAsyncComponent(() => import('@/components/MkDonation.vue')), {}, {}, 'closed');
 			}
 		}
 
