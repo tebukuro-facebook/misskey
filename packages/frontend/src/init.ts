@@ -532,7 +532,7 @@ if ($i) {
 				Date.now() - 1000 * 60 * 60 * 24 * 30
 		) {
 			popup(
-				defineAsyncComponent(() => import("@/components/MkDonation.vue")),
+				// defineAsyncComponent(() => import("@/components/MkDonation.vue")),
 				{},
 				{},
 				"closed"
