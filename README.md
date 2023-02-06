@@ -13,6 +13,8 @@ The fork of [Misskey](https://github.com/syuilo/misskey)
 
 <a href="https://join.misskey.page/">Misskey</a> is a decentralized microblogging platform born on Earth.
 
+[![codecov](https://codecov.io/gh/misskey-dev/misskey/branch/develop/graph/badge.svg?token=R6IQZ3QJOL)](https://codecov.io/gh/misskey-dev/misskey)
+
 </div>
 
 ---
