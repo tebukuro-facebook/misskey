@@ -7,13 +7,14 @@
       :placeholder="q"
     />
     <button :class="$style.button" @click="search">
-      <i class="ti ti-search"></i> {{ $ts.searchByGoogle }}
+      <i class="ti ti-search"></i> {{ i18n.ts.searchByGoogle }}
     </button>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue";
+import { i18n } from "@/i18n";
 
 const props = defineProps<{
   q: string;
