@@ -48,15 +48,20 @@ export interface Locale {
     "unpin": string;
     "copyContent": string;
     "copyLink": string;
+    "copyLinkRenote": string;
     "delete": string;
     "deleteAndEdit": string;
     "deleteAndEditConfirm": string;
     "addToList": string;
+    "addToAntenna": string;
     "sendMessage": string;
     "copyRSS": string;
     "copyUsername": string;
     "copyUserId": string;
     "copyNoteId": string;
+    "copyFileId": string;
+    "copyFolderId": string;
+    "copyProfileUrl": string;
     "searchUser": string;
     "reply": string;
     "loadMore": string;
@@ -139,8 +144,10 @@ export interface Locale {
     "suspendConfirm": string;
     "unsuspendConfirm": string;
     "selectList": string;
+    "editList": string;
     "selectChannel": string;
     "selectAntenna": string;
+    "editAntenna": string;
     "selectWidget": string;
     "editWidgets": string;
     "editWidgetsExit": string;
@@ -153,6 +160,9 @@ export interface Locale {
     "settingGuide": string;
     "cacheRemoteFiles": string;
     "cacheRemoteFilesDescription": string;
+    "youCanCleanRemoteFilesCache": string;
+    "cacheRemoteSensitiveFiles": string;
+    "cacheRemoteSensitiveFilesDescription": string;
     "flagAsBot": string;
     "flagAsBotDescription": string;
     "flagAsCat": string;
@@ -314,7 +324,7 @@ export interface Locale {
     "rename": string;
     "avatar": string;
     "banner": string;
-    "nsfw": string;
+    "displayOfSensitiveMedia": string;
     "whenServerDisconnected": string;
     "disconnectedFromServer": string;
     "reload": string;
@@ -349,7 +359,6 @@ export interface Locale {
     "driveCapacityPerLocalAccount": string;
     "driveCapacityPerRemoteAccount": string;
     "inMb": string;
-    "iconUrl": string;
     "bannerUrl": string;
     "backgroundImageUrl": string;
     "basicInfo": string;
@@ -405,10 +414,14 @@ export interface Locale {
     "administrator": string;
     "token": string;
     "2fa": string;
+    "setupOf2fa": string;
     "totp": string;
     "totpDescription": string;
     "moderator": string;
     "moderation": string;
+    "moderationNote": string;
+    "addModerationNote": string;
+    "moderationLogs": string;
     "nUsersMentioned": string;
     "securityKeyAndPasskey": string;
     "securityKey": string;
@@ -648,6 +661,7 @@ export interface Locale {
     "sample": string;
     "abuseReports": string;
     "reportAbuse": string;
+    "reportAbuseRenote": string;
     "reportAbuseOf": string;
     "fillAbuseReportDescription": string;
     "abuseReported": string;
@@ -675,6 +689,7 @@ export interface Locale {
     "unclip": string;
     "confirmToUnclipAlreadyClippedNote": string;
     "public": string;
+    "private": string;
     "i18nInfo": string;
     "manageAccessTokens": string;
     "accountInfo": string;
@@ -699,6 +714,7 @@ export interface Locale {
     "alwaysMarkSensitive": string;
     "loadRawImages": string;
     "disableShowingAnimatedImages": string;
+    "highlightSensitiveMedia": string;
     "verificationEmailSent": string;
     "notSet": string;
     "emailVerified": string;
@@ -1013,7 +1029,7 @@ export interface Locale {
     "enableChartsForRemoteUser": string;
     "enableChartsForFederatedInstances": string;
     "showClipButtonInNoteFooter": string;
-    "largeNoteReactions": string;
+    "reactionsDisplaySize": string;
     "noteIdOrUrl": string;
     "video": string;
     "videos": string;
@@ -1066,6 +1082,63 @@ export interface Locale {
     "additionalEmojiDictionary": string;
     "installed": string;
     "branding": string;
+    "enableServerMachineStats": string;
+    "enableIdenticonGeneration": string;
+    "turnOffToImprovePerformance": string;
+    "createInviteCode": string;
+    "createWithOptions": string;
+    "createCount": string;
+    "inviteCodeCreated": string;
+    "inviteLimitExceeded": string;
+    "createLimitRemaining": string;
+    "inviteLimitResetCycle": string;
+    "expirationDate": string;
+    "noExpirationDate": string;
+    "inviteCodeUsedAt": string;
+    "registeredUserUsingInviteCode": string;
+    "waitingForMailAuth": string;
+    "inviteCodeCreator": string;
+    "usedAt": string;
+    "unused": string;
+    "used": string;
+    "expired": string;
+    "doYouAgree": string;
+    "beSureToReadThisAsItIsImportant": string;
+    "iHaveReadXCarefullyAndAgree": string;
+    "dialog": string;
+    "icon": string;
+    "forYou": string;
+    "currentAnnouncements": string;
+    "pastAnnouncements": string;
+    "youHaveUnreadAnnouncements": string;
+    "useSecurityKey": string;
+    "replies": string;
+    "renotes": string;
+    "loadReplies": string;
+    "loadConversation": string;
+    "pinnedList": string;
+    "keepScreenOn": string;
+    "verifiedLink": string;
+    "notifyNotes": string;
+    "unnotifyNotes": string;
+    "authentication": string;
+    "authenticationRequiredToContinue": string;
+    "dateAndTime": string;
+    "showRenotes": string;
+    "edited": string;
+    "notificationRecieveConfig": string;
+    "mutualFollow": string;
+    "fileAttachedOnly": string;
+    "_announcement": {
+        "forExistingUsers": string;
+        "forExistingUsersDescription": string;
+        "needConfirmationToRead": string;
+        "needConfirmationToReadDescription": string;
+        "end": string;
+        "tooManyActiveAnnouncementDescription": string;
+        "readConfirmTitle": string;
+        "readConfirmText": string;
+    };
     "_initialAccountSetting": {
         "accountCreated": string;
         "letsStartAccountSetup": string;
@@ -1084,6 +1157,16 @@ export interface Locale {
     };
     "_serverRules": {
         "description": string;
+    };
+    "_serverSettings": {
+        "iconUrl": string;
+        "appIconDescription": string;
+        "appIconUsageExample": string;
+        "appIconStyleRecommendation": string;
+        "appIconResolutionMustBe": string;
+        "manifestJsonOverride": string;
+        "shortName": string;
+        "shortNameDescription": string;
     };
     "_accountMigration": {
         "moveFrom": string;
@@ -1414,6 +1497,10 @@ export interface Locale {
                 "description": string;
                 "flavor": string;
             };
+            "_smashTestNotificationButton": {
+                "title": string;
+                "description": string;
+            };
         };
     };
     "_role": {
@@ -1455,7 +1542,11 @@ export interface Locale {
             "gtlAvailable": string;
             "ltlAvailable": string;
             "canPublicNote": string;
+            "canEditNote": string;
             "canInvite": string;
+            "inviteLimit": string;
+            "inviteLimitCycle": string;
+            "inviteExpirationTime": string;
             "canManageCustomEmojis": string;
             "driveCapacity": string;
             "alwaysMarkNsfw": string;
@@ -1471,6 +1562,7 @@ export interface Locale {
             "descriptionOfRateLimitFactor": string;
             "canHideAds": string;
             "canSearchNotes": string;
+            "canUseTranslator": string;
         };
         "_condition": {
             "isLocal": string;
@@ -1526,6 +1618,7 @@ export interface Locale {
         "back": string;
         "reduceFrequencyOfThisAd": string;
         "hide": string;
+        "timezoneinfo": string;
     };
     "_forgotPassword": {
         "enterEmail": string;
@@ -1550,6 +1643,7 @@ export interface Locale {
         "install": string;
         "installWarn": string;
         "manage": string;
+        "viewSource": string;
     };
     "_preferencesBackups": {
         "list": string;
@@ -1587,7 +1681,7 @@ export interface Locale {
         "morePatrons": string;
         "patrons": string;
     };
-    "_nsfw": {
+    "_displayOfSensitiveMedia": {
         "respect": string;
         "ignore": string;
         "force": string;
@@ -1754,18 +1848,17 @@ export interface Locale {
     "_2fa": {
         "alreadyRegistered": string;
         "registerTOTP": string;
-        "passwordToTOTP": string;
         "step1": string;
         "step2": string;
         "step2Click": string;
-        "step2Url": string;
+        "step2Uri": string;
         "step3Title": string;
         "step3": string;
+        "setupCompleted": string;
         "step4": string;
         "securityKeyNotSupported": string;
         "registerTOTPBeforeKey": string;
         "securityKeyInfo": string;
-        "chromePasskeyNotSupported": string;
         "registerSecurityKey": string;
         "securityKeyName": string;
         "tapSecurityKey": string;
@@ -1776,6 +1869,11 @@ export interface Locale {
         "renewTOTPConfirm": string;
         "renewTOTPOk": string;
         "renewTOTPCancel": string;
+        "checkBackupCodesBeforeCloseThisWizard": string;
+        "backupCodes": string;
+        "backupCodesDescription": string;
+        "backupCodeUsedWarning": string;
+        "backupCodesExhaustedWarning": string;
     };
     "_permissions": {
         "read:account": string;
@@ -1810,6 +1908,10 @@ export interface Locale {
         "write:gallery": string;
         "read:gallery-likes": string;
         "write:gallery-likes": string;
+        "read:flash": string;
+        "write:flash": string;
+        "read:flash-likes": string;
+        "write:flash-likes": string;
     };
     "_auth": {
         "shareAccessTitle": string;
@@ -1827,6 +1929,7 @@ export interface Locale {
         "homeTimeline": string;
         "users": string;
         "userList": string;
+        "userBlacklist": string;
     };
     "_weekday": {
         "sunday": string;
@@ -1935,6 +2038,7 @@ export interface Locale {
         "metadataContent": string;
         "changeAvatar": string;
         "changeBanner": string;
+        "verifiedLinkDescription": string;
     };
     "_exportOrImport": {
         "allNotes": string;
@@ -2063,11 +2167,17 @@ export interface Locale {
         "youReceivedFollowRequest": string;
         "yourFollowRequestAccepted": string;
         "pollEnded": string;
+        "newNote": string;
         "unreadAntennaNote": string;
         "emptyPushNotificationMessage": string;
         "achievementEarned": string;
+        "testNotification": string;
+        "checkNotificationBehavior": string;
+        "sendTestNotification": string;
+        "notificationWillBeDisplayedLikeThis": string;
         "_types": {
             "all": string;
+            "note": string;
             "follow": string;
             "mention": string;
             "reply": string;
@@ -2103,6 +2213,9 @@ export interface Locale {
         "introduction": string;
         "introduction2": string;
         "widgetsIntroduction": string;
+        "useSimpleUiForNonRootPages": string;
+        "usedAsMinWidthWhenFlexible": string;
+        "flexible": string;
         "_columns": {
             "main": string;
             "widgets": string;
@@ -2144,8 +2257,40 @@ export interface Locale {
             "mention": string;
         };
     };
+    "_moderationLogTypes": {
+        "createRole": string;
+        "deleteRole": string;
+        "updateRole": string;
+        "assignRole": string;
+        "unassignRole": string;
+        "suspend": string;
+        "unsuspend": string;
+        "addCustomEmoji": string;
+        "updateCustomEmoji": string;
+        "deleteCustomEmoji": string;
+        "updateServerSettings": string;
+        "updateUserNote": string;
+        "deleteDriveFile": string;
+        "deleteNote": string;
+        "createGlobalAnnouncement": string;
+        "createUserAnnouncement": string;
+        "updateGlobalAnnouncement": string;
+        "updateUserAnnouncement": string;
+        "deleteGlobalAnnouncement": string;
+        "deleteUserAnnouncement": string;
+        "resetPassword": string;
+        "suspendRemoteInstance": string;
+        "unsuspendRemoteInstance": string;
+        "markSensitiveDriveFile": string;
+        "unmarkSensitiveDriveFile": string;
+        "resolveAbuseReport": string;
+        "createInvitation": string;
+        "createAd": string;
+        "deleteAd": string;
+        "updateAd": string;
+    };
 }
 declare const locales: {
     [lang: string]: Locale;
 };
-export = locales;
+export default locales;

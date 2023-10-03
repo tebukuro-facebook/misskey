@@ -6,12 +6,31 @@ The fork of [Misskey](https://github.com/syuilo/misskey)
 試験用
 
 <div align="center">
+<a href="https://misskey-hub.net">
+	<img src="./assets/title_float.svg" alt="Misskey logo" style="border-radius:50%" width="400"/>
+</a>
+
+**🌎 **[Misskey](https://misskey-hub.net/)** is an open source, decentralized social media platform that's free forever! 🚀**
+
+---
 
 [![build-test](https://github.com/tebukuro-facebook/misskey/workflows/docker-build/badge.svg)](https://github.com/tebukuro-facebook/misskey/actions/workflows/docker-build.yml)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge&logo=github)](http://makeapullrequest.com)
 [![Awesome Humane Tech](https://raw.githubusercontent.com/humanetech-community/awesome-humane-tech/main/humane-tech-badge.svg?sanitize=true)](https://github.com/humanetech-community/awesome-humane-tech)
 
-<a href="https://join.misskey.page/">Misskey</a> is a decentralized microblogging platform born on Earth.
+<a href="https://misskey-hub.net/docs/install.html">
+		<img src="https://custom-icon-badges.herokuapp.com/badge/create_an-instance-FBD53C?logoColor=FBD53C&style=for-the-badge&logo=server&labelColor=363B40" alt="create an instance"/></a>
+
+<a href="./CONTRIBUTING.md">
+		<img src="https://custom-icon-badges.herokuapp.com/badge/become_a-contributor-A371F7?logoColor=A371F7&style=for-the-badge&logo=git-merge&labelColor=363B40" alt="become a contributor"/></a>
+
+<a href="https://discord.gg/Wp8gVStHW3">
+		<img src="https://custom-icon-badges.herokuapp.com/badge/join_the-community-5865F2?logoColor=5865F2&style=for-the-badge&logo=discord&labelColor=363B40" alt="join the community"/></a>
+
+<a href="https://www.patreon.com/syuilo">
+		<img src="https://custom-icon-badges.herokuapp.com/badge/become_a-patron-F96854?logoColor=F96854&style=for-the-badge&logo=patreon&labelColor=363B40" alt="become a patron"/></a>
+
+---
 
 [![codecov](https://codecov.io/gh/misskey-dev/misskey/branch/develop/graph/badge.svg?token=R6IQZ3QJOL)](https://codecov.io/gh/misskey-dev/misskey)
 

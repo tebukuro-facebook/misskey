@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: syuilo and other misskey contributors
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
 <template>
   <div :class="$style.root">
     <input
@@ -13,8 +18,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { i18n } from "@/i18n";
+import { ref } from 'vue';
+import { i18n } from '@/i18n.js';
 
 const props = defineProps<{
   q: string;

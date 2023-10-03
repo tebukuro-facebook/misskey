@@ -1,10 +1,20 @@
+<!--
+SPDX-FileCopyrightText: syuilo and other misskey contributors
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
 <template>
 <MkStickyContainer>
-	<template #header><XHeader :actions="headerActions" :tabs="headerTabs"/></template>
+	<template #header>
+		<XHeader :actions="headerActions" :tabs="headerTabs" />
+	</template>
 	<MkSpacer :contentMax="900">
+		<MkSwitch :modelValue="publishing" @update:modelValue="onChangePublishing">
+			{{ i18n.ts.publishing }}
+		</MkSwitch>
 		<div>
 			<div v-for="ad in ads" class="_panel _gaps_m" :class="$style.ad">
-				<MkAd v-if="ad.url" :specify="ad"/>
+				<MkAd v-if="ad.url" :specify="ad" />
 				<MkInput v-model="ad.url" type="url">
 					<template #label>URL</template>
 				</MkInput>
@@ -36,12 +46,25 @@
 						<template #label>{{ i18n.ts.expiration }}</template>
 					</MkInput>
 				</FormSplit>
+				<MkFolder>
+					<template #label>{{ i18n.ts.advancedSettings }}</template>
+					<span>
+						{{ i18n.ts._ad.timezoneinfo }}
+						<div v-for="(day, index) in daysOfWeek" :key="index">
+							<input :id="`ad${ad.id}-${index}`" type="checkbox" :checked="(ad.dayOfWeek & (1 << index)) !== 0"
+								@change="toggleDayOfWeek(ad, index)">
+							<label :for="`ad${ad.id}-${index}`">{{ day }}</label>
+						</div>
+					</span>
+				</MkFolder>
 				<MkTextarea v-model="ad.memo">
 					<template #label>{{ i18n.ts.memo }}</template>
 				</MkTextarea>
 				<div class="buttons">
-					<MkButton class="button" inline primary style="margin-right: 12px;" @click="save(ad)"><i class="ti ti-device-floppy"></i> {{ i18n.ts.save }}</MkButton>
-					<MkButton class="button" inline danger @click="remove(ad)"><i class="ti ti-trash"></i> {{ i18n.ts.remove }}</MkButton>
+					<MkButton class="button" inline primary style="margin-right: 12px;" @click="save(ad)"><i
+							class="ti ti-device-floppy"></i> {{ i18n.ts.save }}</MkButton>
+					<MkButton class="button" inline danger @click="remove(ad)"><i class="ti ti-trash"></i> {{ i18n.ts.remove }}
+					</MkButton>
 				</div>
 			</div>
 			<MkButton class="button" @click="more()">
@@ -59,18 +82,22 @@ import MkButton from '@/components/MkButton.vue';
 import MkInput from '@/components/MkInput.vue';
 import MkTextarea from '@/components/MkTextarea.vue';
 import MkRadios from '@/components/MkRadios.vue';
+import MkFolder from '@/components/MkFolder.vue';
+import MkSwitch from '@/components/MkSwitch.vue';
 import FormSplit from '@/components/form/split.vue';
-import * as os from '@/os';
-import { i18n } from '@/i18n';
-import { definePageMetadata } from '@/scripts/page-metadata';
+import * as os from '@/os.js';
+import { i18n } from '@/i18n.js';
+import { definePageMetadata } from '@/scripts/page-metadata.js';
 
 let ads: any[] = $ref([]);
 
 // ISO形式はTZがUTCになってしまうので、TZ分ずらして時間を初期化
 const localTime = new Date();
 const localTimeDiff = localTime.getTimezoneOffset() * 60 * 1000;
+const daysOfWeek: string[] = [i18n.ts._weekday.sunday, i18n.ts._weekday.monday, i18n.ts._weekday.tuesday, i18n.ts._weekday.wednesday, i18n.ts._weekday.thursday, i18n.ts._weekday.friday, i18n.ts._weekday.saturday];
+let publishing = false;
 
-os.api('admin/ad/list').then(adsResponse => {
+os.api('admin/ad/list', { publishing: publishing }).then(adsResponse => {
 	ads = adsResponse.map(r => {
 		const exdate = new Date(r.expiresAt);
 		const stdate = new Date(r.startsAt);
@@ -84,6 +111,15 @@ os.api('admin/ad/list').then(adsResponse => {
 	});
 });
 
+const onChangePublishing = (v) => {
+	publishing = v;
+	refresh();
+};
+// 選択された曜日(index)のビットフラグを操作する
+function toggleDayOfWeek(ad, index) {
+	ad.dayOfWeek ^= 1 << index;
+}
+
 function add() {
 	ads.unshift({
 		id: null,
@@ -95,6 +131,7 @@ function add() {
 		imageUrl: null,
 		expiresAt: null,
 		startsAt: null,
+		dayOfWeek: 0,
 	});
 }
 
@@ -105,8 +142,11 @@ function remove(ad) {
 	}).then(({ canceled }) => {
 		if (canceled) return;
 		ads = ads.filter(x => x !== ad);
+		if (ad.id == null) return;
 		os.apiWithDialog('admin/ad/delete', {
 			id: ad.id,
+		}).then(() => {
+			refresh();
 		});
 	});
 }
@@ -148,7 +188,7 @@ function save(ad) {
 	}
 }
 function more() {
-	os.api('admin/ad/list', { untilId: ads.reduce((acc, ad) => ad.id != null ? ad : acc).id }).then(adsResponse => {
+	os.api('admin/ad/list', { untilId: ads.reduce((acc, ad) => ad.id != null ? ad : acc).id, publishing: publishing }).then(adsResponse => {
 		ads = ads.concat(adsResponse.map(r => {
 			const exdate = new Date(r.expiresAt);
 			const stdate = new Date(r.startsAt);
@@ -164,7 +204,7 @@ function more() {
 }
 
 function refresh() {
-	os.api('admin/ad/list').then(adsResponse => {
+	os.api('admin/ad/list', { publishing: publishing }).then(adsResponse => {
 		ads = adsResponse.map(r => {
 			const exdate = new Date(r.expiresAt);
 			const stdate = new Date(r.startsAt);
