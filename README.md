@@ -1,10 +1,3 @@
-
-<h1 align="center">Facebook2(misskey)</h1>
-
-The fork of [Misskey](https://github.com/syuilo/misskey)
-
-試験用
-
 <div align="center">
 <a href="https://misskey-hub.net">
 	<img src="./assets/title_float.svg" alt="Misskey logo" style="border-radius:50%" width="400"/>
@@ -14,11 +7,10 @@ The fork of [Misskey](https://github.com/syuilo/misskey)
 
 ---
 
-[![build-test](https://github.com/tebukuro-facebook/misskey/workflows/docker-build/badge.svg)](https://github.com/tebukuro-facebook/misskey/actions/workflows/docker-build.yml)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge&logo=github)](http://makeapullrequest.com)
-[![Awesome Humane Tech](https://raw.githubusercontent.com/humanetech-community/awesome-humane-tech/main/humane-tech-badge.svg?sanitize=true)](https://github.com/humanetech-community/awesome-humane-tech)
+<a href="https://misskey-hub.net/servers/">
+		<img src="https://custom-icon-badges.herokuapp.com/badge/find_an-instance-acea31?logoColor=acea31&style=for-the-badge&logo=misskey&labelColor=363B40" alt="find an instance"/></a>
 
-<a href="https://misskey-hub.net/docs/install.html">
+<a href="https://misskey-hub.net/docs/for-admin/install/guides/">
 		<img src="https://custom-icon-badges.herokuapp.com/badge/create_an-instance-FBD53C?logoColor=FBD53C&style=for-the-badge&logo=server&labelColor=363B40" alt="create an instance"/></a>
 
 <a href="./CONTRIBUTING.md">
@@ -36,8 +28,9 @@ The fork of [Misskey](https://github.com/syuilo/misskey)
 
 </div>
 
----
-:sparkles: Features
+<div>
+
+<a href="https://xn--931a.moe/"><img src="https://github.com/misskey-dev/misskey/blob/develop/assets/ai.png?raw=true" align="right" height="320px"/></a>
 
 ## ✨ Features
 - **ActivityPub support**\
@@ -52,42 +45,34 @@ With Misskey's built in drive, you get cloud storage right in your social media,
 	Furthermore, plugins can be created using AiScript, an original programming language.
 - And much more...
 
-<h3>Posting</h3>
-<p>
-Post your ideas, discussion topics, fun moments, or anything else you want to share! Misskey supports text, emoji, pictures, videos, and polls!
-</p>
+</div>
 
----
+<div style="clear: both;"></div>
 
-<h3 >Reactions</h3>
-<p>
-Reactions are the simplest way to respond to others' posts. Simply pick a reaction emote from the list! Reactions on Misskey are much more expressive than other social media services which only allow “liking”.
-</p>
+## Documentation
 
----
+Misskey Documentation can be found at [Misskey Hub](https://misskey-hub.net/docs/), some of the links and graphics above also lead to specific portions of it.
 
-<h3>Interface</h3>
-<p>
-Customize the UI to your own tastes! No UI will work for everyone, so Misskey is completely customizable. Make Misskey *yours* by editing the style, adjusting timeline layouts, and placing widgets.
-</p>
+## Sponsors
 
----
+<div align="center">
+	<a class="rss3" title="RSS3" href="https://rss3.io/" target="_blank"><img src="https://rss3.mypinata.cloud/ipfs/QmUG6H3Z7D5P511shn7sB4CPmpjH5uZWu4m5mWX7U3Gqbu" alt="RSS3" height="60"></a>
+</div>
 
-<h3>Misskey Drive</h3>
-<p>
-Organize and store your files! Want to post a picture you have already uploaded? Wish you could organize your files into folders? Misskey Drive is a solution!
-</p>
+## Thanks
 
----
+<a href="https://www.chromatic.com/"><img src="https://user-images.githubusercontent.com/321738/84662277-e3db4f80-af1b-11ea-88f5-91d67a5e59f6.png" height="30" alt="Chromatic" /></a>
 
-...and more!
+Thanks to [Chromatic](https://www.chromatic.com/) for providing the visual testing platform that helps us review UI changes and catch visual regressions.
 
-:package: Create your own instance
-----------------------------------------------------------------
-Please see the [Setup and Installation Guide](https://misskey-hub.net/docs/install.html).
+<a href="https://about.codecov.io/for/open-source/"><img src="https://about.codecov.io/wp-content/themes/codecov/assets/brand/sentry-cobranding/logos/codecov-by-sentry-logo.svg" height="30" alt="Codecov" /></a>
 
-:wrench: Contribution
-----------------------------------------------------------------
-Please see the [Contribution Guide](./CONTRIBUTING.md).
+Thanks to [Codecov](https://about.codecov.io/for/open-source/) for providing the code coverage platform that helps us improve our test coverage.
 
-### Collaborators
+<a href="https://crowdin.com/"><img src="https://user-images.githubusercontent.com/20679825/230709597-1299a011-171a-4294-a91e-355a9b37c672.svg" height="30" alt="Crowdin" /></a>
+
+Thanks to [Crowdin](https://crowdin.com/) for providing the localization platform that helps us translate Misskey into many languages.
+
+<a href="https://hub.docker.com/"><img src="https://user-images.githubusercontent.com/20679825/230148221-f8e73a32-a49b-47c3-9029-9a15c3824f92.png" height="30" alt="Docker" /></a>
+
+Thanks to [Docker](https://hub.docker.com/) for providing the container platform that helps us run Misskey in production.
